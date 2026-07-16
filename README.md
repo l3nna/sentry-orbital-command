@@ -12,14 +12,14 @@ An interactive, dual-engine orbital tracking and tactical visualization interfac
 
 The tactical hub is built using a decoupled architecture:
 
-1. **`satellite_sync.py` (Data & Physics Sync Core)**
+1. **Backend / Data Sync Core**
    * Connects to secure CelesTrak servers to scrape active satellite categories.
-   * If offline, performs a full programmatic fallback to local `stations.txt` databases.
+   * If offline, performs a full programmatic fallback to local databases.
    * Parses raw TLE files to calculate orbital characteristics (Semi-Major Axis, Period, Eccentricity, Apogee, Perigee, and Average Altitude) utilizing Keplerian mechanics.
    * Classifies assets dynamically (Space Stations, GPS, Mega-Constellations, Earth Obs, Telescopes, and Space Debris).
-   * Generates a unified `satellite_fleet_data.json` local database.
+   * Generates a unified local database for the frontend to consume.
 
-2. **`dashboard.html` (Command & Intercept Overlay)**
+2. **Frontend / Command & Intercept Overlay**
    * Single-page cyberpunk dashboard with active filter matrix, category search, and real-time UTC tactical clocks.
    * Responsive **Interactive Radar Map** drawn via HTML5 Canvas showing relative orbital projections, movement, and command-laser lock indicators.
    * Live telemetry HUD instantly reflecting active target profile stats.
@@ -31,7 +31,7 @@ The tactical hub is built using a decoupled architecture:
 Follow these commands to deploy the system locally:
 
 ### 1. Synchronize the Fleet Database
-Run the Python synchronization script to scrape live internet data (or parse local `stations.txt` if offline):
+Run the Python synchronization script to scrape live internet data (or parse local fallbacks if offline):
 
 ```bash
-python satellite_sync.py
+python <YOUR_PYTHON_SCRIPT_NAME>.py
