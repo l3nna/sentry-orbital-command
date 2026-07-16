@@ -607,18 +607,37 @@ let mouseDownPos = { x: 0, y: 0 };
 if (container) {
     container.addEventListener("mousedown", (e) => { mouseDownPos.x = e.clientX; mouseDownPos.y = e.clientY; });
     container.addEventListener("mouseup", (e) => {
+        // Prevent trigger if the user was dragging the camera around
         if (Math.sqrt(Math.pow(e.clientX - mouseDownPos.x, 2) + Math.pow(e.clientY - mouseDownPos.y, 2)) > 3) return;
+        
         const rect = renderer.domElement.getBoundingClientRect();
         mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1; 
         mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
         raycaster.setFromCamera(mouse, camera);
+        
         const intersects = raycaster.intersectObjects(Object.values(satelliteFleet).filter(m => m.visible), true);
 
         if (intersects.length > 0) {
-            let p = intersects[0].object;
-            while (p && p.parent !== scene) p = p.parent;
-            if (p && p.userData.id) selectSatelliteTarget(p.userData.id, e.shiftKey);
-        } else { unselectSatelliteSystem(); }
+            let intersectedObject = intersects[0].object;
+            let foundSatelliteId = null;
+
+            // Walk up the visual parent hierarchy tree to find the node possessing our target id tracking vectors
+            while (intersectedObject) {
+                if (intersectedObject.userData && intersectedObject.userData.id) {
+                    foundSatelliteId = intersectedObject.userData.id;
+                    break;
+                }
+                intersectedObject = intersectedObject.parent;
+            }
+
+            if (foundSatelliteId) {
+                selectSatelliteTarget(foundSatelliteId, e.shiftKey);
+            } else {
+                unselectSatelliteSystem();
+            }
+        } else { 
+            unselectSatelliteSystem(); 
+        }
     });
 }
 
@@ -674,12 +693,20 @@ function animate() {
 
     if (isAnimatingCamera) {
         let last = selectedSatelliteIds[selectedSatelliteIds.length - 1];
+        let targetLookAt = new THREE.Vector3(0, 0, 0);
+
         if (last && satelliteFleet[last]?.visible) {
-            controls.target.lerp(satelliteFleet[last].position, cameraTransitionSpeed); 
-            camera.position.lerp(targetCameraPos, cameraTransitionSpeed);
-        } else {
-            controls.target.lerp(new THREE.Vector3(0, 0, 0), cameraTransitionSpeed); 
-            camera.position.lerp(targetCameraPos, cameraTransitionSpeed);
+            targetLookAt.copy(satelliteFleet[last].position);
+        }
+
+        // Interpolate target and camera vectors smoothly
+        controls.target.lerp(targetLookAt, cameraTransitionSpeed); 
+        camera.position.lerp(targetCameraPos, cameraTransitionSpeed);
+
+        // Turn off camera animation flag once camera vector is securely within snapping thresholds
+        if (camera.position.distanceTo(targetCameraPos) < 0.01 && 
+            controls.target.distanceTo(targetLookAt) < 0.01) {
+            isAnimatingCamera = false;
         }
     }
     drawTelemetryWave(); 
