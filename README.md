@@ -1,28 +1,27 @@
 # 🛰️ Sentry Command: Satellite Tactical Hub
 
-An interactive, dual-engine orbital tracking and tactical visualization interface. This system syncs raw satellite Two-Line Element (TLE) data directly from global space catalogs, solves the Keplerian orbital mechanics to extract altitude, period, and tracking vectors, and serves a high-fidelity cyberpunk visual control deck.
+An interactive, dual-engine orbital tracking and tactical visualization interface. This system features an asynchronous FastAPI backend that decodes real-time satellite Two-Line Element (TLE) data using Keplerian mechanics, serving live telemetry data to a high-fidelity cyberpunk visual control deck.
 
 ![Sentry System Active](https://img.shields.io/badge/SENTRY_SYSTEM-ACTIVE-00f3ff?style=flat-square)
-![Telemetry Engine](https://img.shields.io/badge/Engine-Python_3.x-blue?style=flat-square)
+![Backend API](https://img.shields.io/badge/Backend-FastAPI-009688?style=flat-square)
+![Server](https://img.shields.io/badge/Server-Uvicorn-20232a?style=flat-square)
 ![Visualization](https://img.shields.io/badge/Console-HTML5_%2F_Canvas-00f3ff?style=flat-square)
 
 ---
 
 ## 🛠️ System Architecture
 
-The tactical hub is built using a decoupled architecture:
+The tactical hub is split into a decoupled, high-performance architecture:
 
-1. **Backend / Data Sync Core**
-   * Connects to secure CelesTrak servers to scrape active satellite categories.
-   * If offline, performs a full programmatic fallback to local databases.
+1. **`sat_api.py` (Asynchronous Python API Backend)**
+   * Powered by **FastAPI** and served via **Uvicorn** for hot-reloading real-time telemetry stream.
    * Parses raw TLE files to calculate orbital characteristics (Semi-Major Axis, Period, Eccentricity, Apogee, Perigee, and Average Altitude) utilizing Keplerian mechanics.
-   * Classifies assets dynamically (Space Stations, GPS, Mega-Constellations, Earth Obs, Telescopes, and Space Debris).
-   * Generates a unified local database for the frontend to consume.
+   * Exposes structured REST endpoints allowing the front-end to dynamically query satellite datasets.
 
-2. **Frontend / Command & Intercept Overlay**
+2. **`index.html` (Command & Intercept Overlay)**
    * Single-page cyberpunk dashboard with active filter matrix, category search, and real-time UTC tactical clocks.
    * Responsive **Interactive Radar Map** drawn via HTML5 Canvas showing relative orbital projections, movement, and command-laser lock indicators.
-   * Live telemetry HUD instantly reflecting active target profile stats.
+   * Pulls real-time orbital calculations directly from the live local FastAPI endpoints.
 
 ---
 
@@ -30,8 +29,8 @@ The tactical hub is built using a decoupled architecture:
 
 Follow these commands to deploy the system locally:
 
-### 1. Synchronize the Fleet Database
-Run the Python synchronization script to scrape live internet data (or parse local fallbacks if offline):
+### 1. Launch the Live API Backend
+Navigate to your project directory and run the FastAPI server via Uvicorn with hot-reload enabled:
 
 ```bash
-python <YOUR_PYTHON_SCRIPT_NAME>.py
+python -m uvicorn sat_api:app --reload
