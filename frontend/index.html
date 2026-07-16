@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orbital Tracker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="hud">
+    <header>
+        <h1>ORBITAL TRACKING SYSTEM</h1>
+        <div id="status">● SYSTEM CONNECTING</div>
+    </header>
+
+    <div class="main-interface">
+        <div class="sidebar">
+            <h2>FLEET_ROSTER</h2>
+            <input type="text" id="matrix-search" placeholder="FILTER TARGETS..." autocomplete="off">
+            
+            <button id="purge-btn" onclick="unselectSatelliteSystem()" style="background: rgba(2, 2, 8, 0.9); color: #ff2a2a; border: 1px solid rgba(255, 42, 42, 0.4); padding: 6px 10px; cursor: pointer; font-size: 0.7rem; font-family: monospace; letter-spacing: 1.5px; margin-bottom: 8px; width: 100%; display: block;">
+                [ PURGE ACTIVE SELECTION ]
+            </button>
+
+            <div id="satellite-roster"></div>
+        </div>
+
+        <div id="earth-container"></div>
+
+        <div class="telemetry">
+            <h2>SYS_TELEMETRY</h2>
+            <p>IDENT: <span id="name" class="data">---</span></p>
+            <p>TYPE: <span id="type" class="data">---</span></p>
+            <p>REGISTRY: <span id="country" class="data">---</span></p>
+            <p>MISSION: <span id="purpose" class="data">---</span></p>
+            <p>LATITUDE: <span id="lat" class="data">---</span></p>
+            <p>LONGITUDE: <span id="lon" class="data">---</span></p>
+            <p>ALTITUDE: <span id="alt" class="data">---</span></p>
+            
+            <p>VELOCITY: <span id="speed" class="data">---</span></p>
+            <p>ORBIT_PERIOD: <span id="period" class="data">---</span></p>
+            <p>CHASSIS: <span id="dimensions" class="data">---</span></p>
+            <p>POWER_ARC: <span id="power" class="data">---</span></p>
+            
+            <hr class="hud-divider">
+            <p id="desc">Select an orbital unit to map core sub-systems.</p>
+        </div>
+    </div>
+
+    <div class="footer">
+        SYS_TIME: <span id="time">---</span>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="app.js" defer></script>
+</body>
+</html>

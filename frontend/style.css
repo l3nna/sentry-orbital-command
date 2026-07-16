@@ -1,0 +1,256 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at center, #0f1d3a, #020409);
+    color: #00ffcc;
+    font-family: "Courier New", monospace;
+    overflow: hidden;
+}
+
+body::before {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-image: radial-gradient(#00ffcc 1px, transparent 1px);
+    background-size: 50px 50px;
+    opacity: 0.1;
+    pointer-events: none;
+}
+
+.hud {
+    position: relative;
+    width: 95vw;
+    height: 90vh;
+    margin: 5vh auto;
+    border: 1px solid #00ffcc;
+    box-shadow: 0 0 25px rgba(0, 255, 204, 0.2), inset 0 0 15px rgba(0, 255, 204, 0.1);
+    padding: 20px;
+    background: rgba(2, 4, 9, 0.85);
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    border-bottom: 1px dashed rgba(0, 255, 204, 0.4);
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    letter-spacing: 6px;
+    text-align: center;
+    text-shadow: 0 0 8px rgba(0, 255, 204, 0.6);
+}
+
+#status {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #ffaa00;
+    margin-top: 5px;
+    letter-spacing: 2px;
+}
+
+/* Three-column Interface Layout */
+.main-interface {
+    display: flex;
+    flex-grow: 1;
+    position: relative;
+    height: 70%;
+    gap: 15px;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 290px;
+    border: 1px solid rgba(0, 255, 204, 0.5);
+    background: rgba(0, 255, 204, 0.02);
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+    height: 100%;
+}
+
+.sidebar h2 {
+    font-size: 0.9rem;
+    margin: 15px 0 8px 0;
+    border-bottom: 1px dashed rgba(0, 255, 204, 0.5);
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+}
+
+.sidebar h2:first-of-type {
+    margin-top: 0;
+}
+
+/* Input text search box styling */
+#matrix-search {
+    width: 100%;
+    background: rgba(0, 255, 204, 0.05);
+    border: 1px solid rgba(0, 255, 204, 0.4);
+    padding: 8px;
+    color: #fff;
+    font-family: "Courier New", monospace;
+    font-size: 0.8rem;
+    margin-bottom: 10px;
+    outline: none;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+#matrix-search:focus {
+    border-color: #00ffcc;
+    background: rgba(0, 255, 204, 0.1);
+    box-shadow: 0 0 8px rgba(0, 255, 204, 0.3);
+}
+
+#matrix-search::placeholder {
+    color: rgba(0, 255, 204, 0.4);
+}
+
+/* Purge Selection styling */
+#purge-btn {
+    background: rgba(2, 2, 8, 0.9);
+    color: #ff2a2a;
+    border: 1px solid rgba(255, 42, 42, 0.4);
+    padding: 6px 10px;
+    cursor: pointer;
+    font-size: 0.7rem;
+    font-family: "Courier New", monospace;
+    letter-spacing: 1.5px;
+    margin-bottom: 8px;
+    width: 100%;
+    display: block;
+    transition: all 0.2s;
+}
+
+#purge-btn:hover {
+    background: rgba(255, 42, 42, 0.15);
+    border-color: #ff2a2a;
+    box-shadow: 0 0 8px rgba(255, 42, 42, 0.3);
+}
+
+/* Scrollable Fleet Roster styling */
+#satellite-roster {
+    overflow-y: auto;
+    flex-grow: 1;
+}
+
+#satellite-roster::-webkit-scrollbar {
+    width: 4px;
+}
+
+#satellite-roster::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 204, 0.3);
+}
+
+/* Individual roster items */
+.roster-item {
+    padding: 6px;
+    margin: 3px 0;
+    border: 1px solid rgba(0, 255, 204, 0.15);
+    background: rgba(255, 255, 255, 0.01);
+    cursor: pointer;
+    font-size: 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: all 0.2s;
+}
+
+.roster-item:hover {
+    background: rgba(0, 255, 204, 0.1);
+    border-color: #00ffcc;
+}
+
+.roster-item.active {
+    background: rgba(0, 229, 255, 0.15) !important;
+    border-color: #00e5ff;
+    color: #00e5ff;
+    font-weight: bold;
+    box-shadow: 0 0 8px rgba(0, 229, 255, 0.3);
+}
+
+/* Center Interactive Canvas element */
+#earth-container {
+    flex-grow: 1;
+    position: relative;
+    cursor: grab;
+    border: 1px solid rgba(0, 255, 204, 0.2);
+}
+
+#earth-container:active {
+    cursor: grabbing;
+}
+
+/* Telemetry readout panel styling */
+.telemetry {
+    width: 290px;
+    max-height: 100%;
+    overflow-y: auto;
+    border: 1px solid #00ffcc;
+    padding: 15px;
+    background: rgba(0, 255, 204, 0.03);
+    box-shadow: 0 0 10px rgba(0, 255, 204, 0.1);
+    z-index: 10;
+}
+
+.telemetry::-webkit-scrollbar {
+    width: 4px;
+}
+
+.telemetry::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.telemetry::-webkit-scrollbar-thumb {
+    background: rgba(0, 255, 204, 0.2);
+}
+
+.telemetry h2 {
+    font-size: 1rem;
+    margin: 0 0 10px 0;
+    border-bottom: 1px solid #00ffcc;
+    padding-bottom: 5px;
+    letter-spacing: 2px;
+}
+
+.telemetry p {
+    margin: 12px 0;
+    font-size: 0.9rem;
+}
+
+.data {
+    color: #fff;
+    font-weight: bold;
+}
+
+.hud-divider {
+    border: 0;
+    border-top: 1px dashed rgba(0, 255, 204, 0.3);
+    margin: 15px 0 10px 0;
+}
+
+#desc {
+    font-style: italic;
+    color: #88ffaa;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+
+/* Footer layout */
+.footer {
+    border-top: 1px dashed rgba(0, 255, 204, 0.4);
+    padding-top: 10px;
+    margin-top: 15px;
+    font-size: 0.85rem;
+}
