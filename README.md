@@ -34,5 +34,5 @@ Navigate to your project directory and run the FastAPI server via Uvicorn with h
 
 ```bash
 python -m uvicorn sat_api:app --reload
-
+```
 ![Demo](images/Animation.gif)
